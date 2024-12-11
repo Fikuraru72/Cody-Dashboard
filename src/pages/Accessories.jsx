@@ -4,6 +4,7 @@ import { Flowbite, Button } from 'flowbite-react'
 import { FaPencilAlt, FaTrashAlt, FaEye } from 'react-icons/fa'
 import AddAccessoriesModal from '../lib/components/modals/AddAccessoriesModal'
 import DetailAccModals from '../lib/components/modals/DetailAccModals'
+import EditAccModal from '../lib/components/modals/EditAccModal'
 
 
 const data = [
@@ -26,6 +27,7 @@ export const Accessories = () => {
   const [currentPage, setCurrentPage] = useState(1)
   const [showAddModal, setShowAddModal] = useState(false)
   const [showDetailModal, setShowDetailModal] = useState(false)
+  const [showEditModal, setShowEditModal] = useState(false)
   const [selectedAccessory, setSelectedAccessory] = useState(null)
   const [newAccessory, setNewAccessory] = useState({
     name: '',
@@ -54,6 +56,21 @@ export const Accessories = () => {
   const handleViewDetails = (accessory) => {
     setSelectedAccessory(accessory)
     setShowDetailModal(true)
+  }
+
+  const handleEditAccessory = (accessory) => {
+    setSelectedAccessory(accessory)
+    setShowEditModal(true)
+  }
+
+  const handleSaveAccessory = (updatedAccessory) => {
+    // Update accessory data here
+    const index = data.findIndex(item => item.id === updatedAccessory.id)
+    if (index !== -1) {
+      data[index] = updatedAccessory
+    }
+    setShowEditModal(false)
+    setSelectedAccessory(null)
   }
 
   return (
@@ -117,7 +134,7 @@ export const Accessories = () => {
                   {item.created}
                 </td>
                 <td className="px-6 py-4 flex justify-between">
-                    <a href="#" className="text-blue-600 dark:text-blue-500 hover:underline">
+                    <a href="#" className="text-blue-600 dark:text-blue-500 hover:underline"  onClick={() => handleEditAccessory(item)}>
                         <FaPencilAlt />
                     </a>
                     <a href="#" className="text-red-600 dark:text-red-500 hover:underline">
@@ -167,6 +184,15 @@ export const Accessories = () => {
             accessory={selectedAccessory}
             />
         )}
+
+        {selectedAccessory && (
+            <EditAccModal
+            show={showEditModal}
+            onClose={() => setShowEditModal(false)}
+            accessory={selectedAccessory}
+            onSave={handleSaveAccessory}
+        />
+      )}
     </Flowbite>
   )
 }
