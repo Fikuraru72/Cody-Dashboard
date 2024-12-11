@@ -33,7 +33,7 @@ export const DonutChart = () => {
 
   return (
     <Flowbite>
-      <div className="max-w-sm w-full h-150 bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
+      <div className="max-w-sm w-full h-100 bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
         <div className="flex justify-between items-start w-full">
           <div className="flex-col items-center">
             <div className="flex items-center mb-1">

@@ -28,10 +28,10 @@ export const EditAccModal = ({ show, onClose, accessory, onSave }) => {
       </div>
       <Modal.Body>
         <div className="space-y-4">
-          <div className="flex items-center space-x-4">
-            <div className="flex-shrink-0">
-              <img className="w-12 h-12 rounded-full" src={formData.image} alt="Accessory" />
+        <div className="flex justify-center items-center">
+              <img className="w-40 h-w-40 rounded-full" src={formData.image} alt="Accessory" />
             </div>
+          <div className="flex items-center ">
             <div className="flex-1 min-w-0">
               <Label htmlFor="name" value="Name" />
               <TextInput

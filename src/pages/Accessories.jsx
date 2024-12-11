@@ -9,15 +9,15 @@ import EditAccModal from '../lib/components/modals/EditAccModal'
 
 const data = [
   { id: 1, name: 'Accessory 1', category: 'Hat', created: '2023-01-01', image: 'https://via.placeholder.com/50?text=Hat+1' },
-  { id: 2, name: 'Accessory 2', category: 'Costume', created: '2023-01-02', image: 'https://via.placeholder.com/50?text=Costume+1' },
+  { id: 2, name: 'Accessory 2', category: 'Torso', created: '2023-01-02', image: 'https://via.placeholder.com/50?text=Torso+1' },
   { id: 3, name: 'Accessory 3', category: 'Hat', created: '2023-01-03', image: 'https://via.placeholder.com/50?text=Hat+2' },
-  { id: 4, name: 'Accessory 4', category: 'Costume', created: '2023-01-04', image: 'https://via.placeholder.com/50?text=Costume+2' },
+  { id: 4, name: 'Accessory 4', category: 'Torso', created: '2023-01-04', image: 'https://via.placeholder.com/50?text=Torso+2' },
   { id: 5, name: 'Accessory 5', category: 'Hat', created: '2023-01-05', image: 'https://via.placeholder.com/50?text=Hat+3' },
-  { id: 6, name: 'Accessory 6', category: 'Costume', created: '2023-01-06', image: 'https://via.placeholder.com/50?text=Costume+3' },
+  { id: 6, name: 'Accessory 6', category: 'Torso', created: '2023-01-06', image: 'https://via.placeholder.com/50?text=Torso+3' },
   { id: 7, name: 'Accessory 7', category: 'Hat', created: '2023-01-07', image: 'https://via.placeholder.com/50?text=Hat+4' },
-  { id: 8, name: 'Accessory 8', category: 'Costume', created: '2023-01-08', image: 'https://via.placeholder.com/50?text=Costume+4' },
+  { id: 8, name: 'Accessory 8', category: 'Torso', created: '2023-01-08', image: 'https://via.placeholder.com/50?text=Torso+4' },
   { id: 9, name: 'Accessory 9', category: 'Hat', created: '2023-01-09', image: 'https://via.placeholder.com/50?text=Hat+5' },
-  { id: 10, name: 'Accessory 10', category: 'Costume', created: '2023-01-10', image: 'https://via.placeholder.com/50?text=Costume+5' },
+  { id: 10, name: 'Accessory 10', category: 'Torso', created: '2023-01-10', image: 'https://via.placeholder.com/50?text=Torso+5' },
   // Tambahkan data dummy lainnya jika diperlukan
 ]
 
@@ -92,7 +92,7 @@ export const Accessories = () => {
             >
                 <option value="">All Categories</option>
                 <option value="Hat">Hat</option>
-                <option value="Costume">Costume</option>
+                <option value="Torso">Torso</option>
             </select>
             <Button className='mx-4 bg-blue-500 text-white rounded-lg' onClick={() => setShowAddModal(true)}>Add</Button>
           </div>
