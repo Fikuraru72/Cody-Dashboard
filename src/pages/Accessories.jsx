@@ -1,77 +1,87 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react';
+import { Flowbite, Button } from 'flowbite-react';
+import { FaPencilAlt, FaTrashAlt, FaEye } from 'react-icons/fa';
+import AddAccessoriesModal from '../lib/components/modals/AddAccessoriesModal';
+import DetailAccModals from '../lib/components/modals/DetailAccModals';
+import EditAccModal from '../lib/components/modals/EditAccModal';
+import { getAllAccessories, createAccessory, updateAccessory, deleteAccessory } from '../lib/api/accessoriesApi';
 
-import { Flowbite, Button } from 'flowbite-react'
-import { FaPencilAlt, FaTrashAlt, FaEye } from 'react-icons/fa'
-import AddAccessoriesModal from '../lib/components/modals/AddAccessoriesModal'
-import DetailAccModals from '../lib/components/modals/DetailAccModals'
-import EditAccModal from '../lib/components/modals/EditAccModal'
-
-
-const data = [
-  { id: 1, name: 'Accessory 1', category: 'Hat', created: '2023-01-01', image: 'https://via.placeholder.com/50?text=Hat+1' },
-  { id: 2, name: 'Accessory 2', category: 'Torso', created: '2023-01-02', image: 'https://via.placeholder.com/50?text=Torso+1' },
-  { id: 3, name: 'Accessory 3', category: 'Hat', created: '2023-01-03', image: 'https://via.placeholder.com/50?text=Hat+2' },
-  { id: 4, name: 'Accessory 4', category: 'Torso', created: '2023-01-04', image: 'https://via.placeholder.com/50?text=Torso+2' },
-  { id: 5, name: 'Accessory 5', category: 'Hat', created: '2023-01-05', image: 'https://via.placeholder.com/50?text=Hat+3' },
-  { id: 6, name: 'Accessory 6', category: 'Torso', created: '2023-01-06', image: 'https://via.placeholder.com/50?text=Torso+3' },
-  { id: 7, name: 'Accessory 7', category: 'Hat', created: '2023-01-07', image: 'https://via.placeholder.com/50?text=Hat+4' },
-  { id: 8, name: 'Accessory 8', category: 'Torso', created: '2023-01-08', image: 'https://via.placeholder.com/50?text=Torso+4' },
-  { id: 9, name: 'Accessory 9', category: 'Hat', created: '2023-01-09', image: 'https://via.placeholder.com/50?text=Hat+5' },
-  { id: 10, name: 'Accessory 10', category: 'Torso', created: '2023-01-10', image: 'https://via.placeholder.com/50?text=Torso+5' },
-  // Tambahkan data dummy lainnya jika diperlukan
-]
-
-export const Accessories = () => {
-  const [searchTerm, setSearchTerm] = useState('')
-  const [categoryFilter, setCategoryFilter] = useState('')
-  const [currentPage, setCurrentPage] = useState(1)
-  const [showAddModal, setShowAddModal] = useState(false)
-  const [showDetailModal, setShowDetailModal] = useState(false)
-  const [showEditModal, setShowEditModal] = useState(false)
-  const [selectedAccessory, setSelectedAccessory] = useState(null)
+const Accessories = () => {
+  const [accessories, setAccessories] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [showDetailModal, setShowDetailModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [selectedAccessory, setSelectedAccessory] = useState(null);
   const [newAccessory, setNewAccessory] = useState({
     name: '',
-    category: '',
-    created: '',
-    image: ''
-  })
-  const itemsPerPage = 5
+    type: '',
+    price: 0,
+    picture_url: '',
+  });
 
-  const filteredData = data.filter(item =>
-    item.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
-    (categoryFilter === '' || item.category === categoryFilter)
-  )
+  const itemsPerPage = 5;
 
-  const totalPages = Math.ceil(filteredData.length / itemsPerPage)
-  const startIndex = (currentPage - 1) * itemsPerPage
-  const endIndex = startIndex + itemsPerPage
-  const currentData = filteredData.slice(startIndex, endIndex)
+  useEffect(() => {
+    fetchAccessories();
+  }, []);
 
-  const handleAddAccessory = () => {
-    data.push({ id: data.length + 1, ...newAccessory })
-    setShowAddModal(false)
-    setNewAccessory({ name: '', category: '', created: '', image: '' })
-  }
+  const fetchAccessories = async () => {
+    try {
+      const data = await getAllAccessories();
+      setAccessories(data);
+    } catch (error) {
+      console.error('Failed to fetch accessories:', error);
+    }
+  };
 
-  const handleViewDetails = (accessory) => {
-    setSelectedAccessory(accessory)
-    setShowDetailModal(true)
-  }
+  const handleAddAccessory = async () => {
+    try {
+      await createAccessory(newAccessory);
+      fetchAccessories();
+      setShowAddModal(false);
+      setNewAccessory({ name: '', type: '', price: 0, picture_url: '' });
+    } catch (error) {
+      console.error('Failed to add accessory:', error);
+    }
+  };
 
   const handleEditAccessory = (accessory) => {
-    setSelectedAccessory(accessory)
-    setShowEditModal(true)
-  }
+    setSelectedAccessory(accessory);
+    setShowEditModal(true);
+  };
 
-  const handleSaveAccessory = (updatedAccessory) => {
-    // Update accessory data here
-    const index = data.findIndex(item => item.id === updatedAccessory.id)
-    if (index !== -1) {
-      data[index] = updatedAccessory
+  const handleSaveAccessory = async (updatedAccessory) => {
+    try {
+      await updateAccessory(updatedAccessory.uuid, updatedAccessory);
+      fetchAccessories();
+      setShowEditModal(false);
+      setSelectedAccessory(null);
+    } catch (error) {
+      console.error('Failed to update accessory:', error);
     }
-    setShowEditModal(false)
-    setSelectedAccessory(null)
-  }
+  };
+
+  const handleDeleteAccessory = async (uuid) => {
+    try {
+      await deleteAccessory(uuid);
+      fetchAccessories();
+    } catch (error) {
+      console.error('Failed to delete accessory:', error);
+    }
+  };
+
+  const filteredData = accessories.filter(
+    (item) =>
+      item.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
+      (categoryFilter === '' || item.type === categoryFilter)
+  );
+
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentData = filteredData.slice(startIndex, startIndex + itemsPerPage);
 
   return (
     <Flowbite>
@@ -86,63 +96,42 @@ export const Accessories = () => {
           />
           <div className="flex">
             <select
-                className="p-2 border border-gray-300 rounded"
-                value={categoryFilter}
-                onChange={(e) => setCategoryFilter(e.target.value)}
+              className="p-2 border border-gray-300 rounded"
+              value={categoryFilter}
+              onChange={(e) => setCategoryFilter(e.target.value)}
             >
-                <option value="">All Categories</option>
-                <option value="Hat">Hat</option>
-                <option value="Torso">Torso</option>
+              <option value="">All Categories</option>
+              <option value="hat">Hat</option>
+              <option value="torso">Torso</option>
             </select>
-            <Button className='mx-4 bg-blue-500 text-white rounded-lg' onClick={() => setShowAddModal(true)}>Add</Button>
+            <Button className="mx-4 bg-blue-500 text-white rounded-lg" onClick={() => setShowAddModal(true)}>
+              Add
+            </Button>
           </div>
-          
         </div>
-        <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
-              <th scope="col" className="px-16 py-3">
-                <span className="sr-only">Image</span>
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Name
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Category
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Created
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Action
-              </th>
+              <th className="px-16 py-3">Image</th>
+              <th className="px-6 py-3">Name</th>
+              <th className="px-6 py-3">Type</th>
+              <th className="px-6 py-3">Price</th>
+              <th className="px-6 py-3">Action</th>
             </tr>
           </thead>
           <tbody>
-            {currentData.map(item => (
-              <tr key={item.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+            {currentData.map((item) => (
+              <tr key={item.uuid} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                 <td className="px-16 py-4">
-                  <img src={item.image} alt="Product" className="w-12 h-12 rounded-full" />
+                  <img src={item.picture_url} alt="Product" className="w-12 h-12 rounded-full" />
                 </td>
-                <td className="px-6 py-4">
-                  {item.name}
-                </td>
-                <td className="px-6 py-4">
-                  {item.category}
-                </td>
-                <td className="px-6 py-4">
-                  {item.created}
-                </td>
-                <td className="px-6 py-4 flex justify-between">
-                    <a href="#" className="text-blue-600 dark:text-blue-500 hover:underline"  onClick={() => handleEditAccessory(item)}>
-                        <FaPencilAlt />
-                    </a>
-                    <a href="#" className="text-red-600 dark:text-red-500 hover:underline">
-                        <FaTrashAlt />
-                    </a>
-                    <a href="#" className="text-blue-600 dark:text-blue-500 hover:underline" onClick={() => handleViewDetails(item)}>
-                        <FaEye />
-                    </a>
+                <td className="px-6 py-4">{item.name}</td>
+                <td className="px-6 py-4">{item.type}</td>
+                <td className="px-6 py-4">${item.price}</td>
+                <td className="px-6 py-4 flex space-x-2">
+                  <FaPencilAlt onClick={() => handleEditAccessory(item)} className="cursor-pointer text-blue-500" />
+                  <FaTrashAlt onClick={() => handleDeleteAccessory(item.uuid)} className="cursor-pointer text-red-500" />
+                  <FaEye onClick={() => setShowDetailModal(true) && setSelectedAccessory(item)} className="cursor-pointer text-gray-500" />
                 </td>
               </tr>
             ))}
@@ -150,8 +139,8 @@ export const Accessories = () => {
         </table>
         <div className="flex justify-between items-center py-4">
           <button
-            className="px-4 py-2 ml-5 text-white bg-blue-500 rounded"
-            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+            className="px-4 py-2 text-white bg-blue-500 rounded"
+            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
             disabled={currentPage === 1}
           >
             Previous
@@ -160,8 +149,8 @@ export const Accessories = () => {
             Page {currentPage} of {totalPages}
           </span>
           <button
-            className="px-4 py-2 ml-5 text-white bg-blue-500 rounded"
-            onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+            className="px-4 py-2 text-white bg-blue-500 rounded"
+            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
             disabled={currentPage === totalPages}
           >
             Next
@@ -177,24 +166,24 @@ export const Accessories = () => {
         handleAddAccessory={handleAddAccessory}
       />
 
-        {selectedAccessory && (
-            <DetailAccModals
-            show={showDetailModal}
-            onClose={() => setShowDetailModal(false)}
-            accessory={selectedAccessory}
-            />
-        )}
+      {selectedAccessory && (
+        <DetailAccModals
+          show={showDetailModal}
+          onClose={() => setShowDetailModal(false)}
+          accessory={selectedAccessory}
+        />
+      )}
 
-        {selectedAccessory && (
-            <EditAccModal
-            show={showEditModal}
-            onClose={() => setShowEditModal(false)}
-            accessory={selectedAccessory}
-            onSave={handleSaveAccessory}
+      {selectedAccessory && (
+        <EditAccModal
+          show={showEditModal}
+          onClose={() => setShowEditModal(false)}
+          accessory={selectedAccessory}
+          onSave={handleSaveAccessory}
         />
       )}
     </Flowbite>
-  )
-}
+  );
+};
 
-export default Accessories
+export default Accessories;
