@@ -44,6 +44,7 @@ const Accessories = () => {
     }
   };
 
+  // Add data baru
   const handleAddAccessory = async (accessoryData) => {
     try {
       fetchAccessories(); // Memperbarui daftar
@@ -60,15 +61,15 @@ const Accessories = () => {
     setSelectedAccessory(accessory);
     setShowEditModal(true);
   };
-
+  
   const handleSaveAccessory = async (updatedAccessory) => {
     try {
       const updatedData = {
         name: updatedAccessory.name,
-        image: updatedAccessory.image,  // Pastikan ini adalah URL gambar yang valid
-        price: updatedAccessory.price,  // Pastikan ini adalah angka harga
-        type: updatedAccessory.type,    // Misalnya "torso" atau "hat"
-        createdAt: updatedAccessory.createdAt,  // Jika diperlukan
+        image: updatedAccessory.image,  
+        price: updatedAccessory.price,  
+        type: updatedAccessory.type,    
+        createdAt: updatedAccessory.createdAt,  
       };
   
       // Log updatedData untuk memeriksa datanya
@@ -90,6 +91,7 @@ const Accessories = () => {
       await deleteAccessory(uuid);
       fetchAccessories();
     } catch (error) {
+      console.log('data', uuid);
       setError('Failed to delete accessory. Please try again.');
       console.error(error);
     }
@@ -157,7 +159,7 @@ const Accessories = () => {
                   <td className="px-6 py-4">${item.price}</td>
                   <td className="px-6 py-4 flex space-x-2">
                     <FaPencilAlt onClick={() => {setSelectedAccessory(item), handleEditAccessory(item)}} className="cursor-pointer text-blue-500" />
-                    <FaTrashAlt onClick={() => {setSelectedAccessory(item), handleDeleteAccessory(item.uuid)}} className="cursor-pointer text-red-500" />
+                    <FaTrashAlt onClick={() => handleDeleteAccessory(item.uuid)} className="cursor-pointer text-red-500" />
                     <FaEye
                       onClick={() => {
                         setShowDetailModal(true); // First, open the modal

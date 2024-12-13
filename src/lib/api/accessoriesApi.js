@@ -1,5 +1,3 @@
-
-import { data } from 'react-router-dom';
 import api from './axiosInstance';
 
 
@@ -73,7 +71,13 @@ export const deleteAccessory = async (uuid) => {
     if (!uuid) {
       throw new Error('UUID tidak diberikan.');
     }
-    const response = await api.delete(`/${uuid}`);
+    const data = { uuid };
+    console.log('Data yang dikirimkan:', data); 
+    const response = await api.post('/v1/admin/costume/delete', data, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
     return response.data;
   } catch (error) {
     console.error('Error deleting accessory:', error);
