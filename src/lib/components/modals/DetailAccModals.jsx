@@ -15,7 +15,7 @@ export const DetailAccModals = ({ show, onClose, accessory }) => {
       {/* Gambar dan Informasi */}
       <div className="flex items-center space-x-4">
         {/* Gambar */}
-        <img className="w-24 h-24 rounded-full shadow-lg" src={accessory.image} alt="Accessory" />
+        <img className="w-24 h-24 rounded-full shadow-lg" src={accessory.picture_url} alt="Accessory" />
         {/* Informasi */}
         
       </div>
@@ -27,11 +27,15 @@ export const DetailAccModals = ({ show, onClose, accessory }) => {
           </div>
           <div>
             <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Category</p>
-            <p className="text-sm font-semibold text-gray-900 dark:text-white">{accessory.category}</p>
+            <p className="text-sm font-semibold text-gray-900 dark:text-white">{accessory.type}</p>
+          </div>
+          <div>
+            <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Price</p>
+            <p className="text-sm font-semibold text-gray-900 dark:text-white">{accessory.price}</p>
           </div>
           <div>
             <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Created At</p>
-            <p className="text-sm font-semibold text-gray-900 dark:text-white">{accessory.created}</p>
+            <p className="text-sm font-semibold text-gray-900 dark:text-white">{accessory.created_at}</p>
           </div>
       </div>
     </div>
