@@ -23,37 +23,46 @@ export const AddAccessoriesModal = ({
   const handleSubmit = async () => {
     setIsLoading(true);
     setError("");
-  
+
     try {
       if (!newAccessory.name || !newAccessory.type || !newAccessory.price) {
-        setError("Semua field wajib diisi.");
+        setError("All fields are required.");
         setIsLoading(false);
         return;
       }
-  
+
       let imageUrl = newAccessory.image;
       if (imageFile) {
         imageUrl = await uploadImage(imageFile);
       }
-  
+
       if (!imageUrl) {
-        setError("Gambar harus diunggah.");
+        setError("Image must be uploaded.");
         setIsLoading(false);
         return;
       }
-  
+
       const accessoryData = {
         name: newAccessory.name,
         picture_url: imageUrl,
         price: isNaN(parseInt(newAccessory.price, 10)) ? 0 : parseInt(newAccessory.price, 10),
         type: newAccessory.type,
       };
-  
-      console.log("Data yang dikirimkan:", accessoryData);
-  
+
       await createAccessory(accessoryData);
       handleAddAccessory(accessoryData);
-      onClose();
+
+      // Ambil ulang data aksesori terbaru
+      // fetchAccessories();
+
+      // Reset form setelah berhasil menyimpan
+      setNewAccessory({
+        name: "",
+        type: "",
+        price: "",
+        image: "",})
+        
+      // onClose();
     } catch (err) {
       console.error("Error detail:", err.response?.data || err.message);
       setError(err.response?.data?.message || "Failed to add accessory. Please try again.");
@@ -61,57 +70,54 @@ export const AddAccessoriesModal = ({
       setIsLoading(false);
     }
   };
-  
 
   return (
-    <Modal show={show} onClose={onClose}>
-      <Modal.Header>Add New Accessory</Modal.Header>
-      <Modal.Body>
-        <div>
-          <Label htmlFor="name" value="Name" />
+    <Modal show={show} onClose={onClose} size="md" className="bg-black bg-opacity-40 backdrop-blur-sm">
+      <Modal.Header className="text-xl p-4 font-semibold text-gray-700">Add New Accessory</Modal.Header>
+      <Modal.Body className="space-y-4">
+        <div className="space-y-2">
+          <Label htmlFor="name" value="Name" className="text-sm font-medium text-gray-600" />
           <TextInput
             id="name"
             placeholder="Enter accessory name"
             value={newAccessory.name}
-            onChange={(e) =>
-              setNewAccessory({ ...newAccessory, name: e.target.value })
-            }
+            onChange={(e) => setNewAccessory({ ...newAccessory, name: e.target.value })}
           />
         </div>
-        <div>
-          <Label htmlFor="type" value="Type" />
-          <TextInput
+        <div className="space-y-2">
+          <Label htmlFor="type" value="Type" className="text-sm font-medium text-gray-600" />
+          <select
             id="type"
-            placeholder="Enter accessory type"
             value={newAccessory.type}
-            onChange={(e) =>
-              setNewAccessory({ ...newAccessory, type: e.target.value })
-            }
-          />
+            onChange={(e) => setNewAccessory({ ...newAccessory, type: e.target.value })}
+            className="block w-full text-sm text-gray-500"
+          >
+            <option value="">Select type</option>
+            <option value="torso">Torso</option>
+            <option value="head">Head</option>
+          </select>
         </div>
-        <div>
-          <Label htmlFor="price" value="Price" />
+        <div className="space-y-2">
+          <Label htmlFor="price" value="Price" className="text-sm font-medium text-gray-600" />
           <TextInput
             id="price"
             type="number"
             placeholder="Enter accessory price"
             value={newAccessory.price}
-            onChange={(e) =>
-              setNewAccessory({ ...newAccessory, price: e.target.value })
-            }
+            onChange={(e) => setNewAccessory({ ...newAccessory, price: e.target.value })}
           />
         </div>
-        <div>
-          <Label htmlFor="image" value="Image" />
-          <input type="file" id="image" onChange={handleImageChange} />
+        <div className="space-y-2">
+          <Label htmlFor="image" value="Image" className="text-sm font-medium text-gray-600" />
+          <input type="file" id="image" className="block w-full text-sm text-gray-500" onChange={handleImageChange} />
         </div>
-        {error && <p className="text-red-500">{error}</p>}
+        {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
       </Modal.Body>
-      <Modal.Footer>
-        <Button onClick={handleSubmit} disabled={isLoading}>
+      <Modal.Footer className="flex space-x-2">
+        <Button onClick={handleSubmit} disabled={isLoading} className="bg-blue-500 text-white px-4 py-2 rounded-lg">
           {isLoading ? <Spinner size="sm" /> : "Add Accessory"}
         </Button>
-        <Button color="gray" onClick={onClose}>
+        <Button color="gray" onClick={onClose} className="px-4 py-2 rounded-lg">
           Cancel
         </Button>
       </Modal.Footer>

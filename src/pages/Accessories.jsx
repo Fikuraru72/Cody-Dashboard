@@ -24,7 +24,7 @@ const Accessories = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const itemsPerPage = 5;
+  const itemsPerPage = 6;
 
   useEffect(() => {
     fetchAccessories();
@@ -47,9 +47,12 @@ const Accessories = () => {
   // Add data baru
   const handleAddAccessory = async (accessoryData) => {
     try {
-      fetchAccessories(); // Memperbarui daftar
       setShowAddModal(true);
       setNewAccessory({ name: "", type: "", price: 0, picture_url: "" });
+      // if (response.success) {
+      //   fetchAccessories(); // Ambil data terbaru setelah update
+      //   setShowAddModal(false);
+      // }
     } catch (error) {
       setError("Failed to add accessory. Please try again.");
       console.error(error);
@@ -60,31 +63,11 @@ const Accessories = () => {
   const handleEditAccessory = (accessory) => {
     setSelectedAccessory(accessory);
     setShowEditModal(true);
+    // if (response.success) {
+    //   fetchAccessories(); // Ambil data terbaru setelah update
+    //   setShowEditModal(false);
+    // }
   };
-  
-  const handleSaveAccessory = async (updatedAccessory) => {
-    try {
-      const updatedData = {
-        name: updatedAccessory.name,
-        image: updatedAccessory.image,  
-        price: updatedAccessory.price,  
-        type: updatedAccessory.type,    
-        createdAt: updatedAccessory.createdAt,  
-      };
-  
-      // Log updatedData untuk memeriksa datanya
-      console.log(updatedData);
-      
-      await updateAccessory(updatedAccessory.uuid, updatedAccessory);
-      fetchAccessories(); // Memperbarui daftar aksesori
-      setShowEditModal(false); // Menutup modal edit
-      setSelectedAccessory(null); // Reset data aksesori yang dipilih
-    } catch (error) {
-      setError('Failed to update accessory. Please try again.');
-      console.error(error);
-    }
-  };
-  
 
   const handleDeleteAccessory = async (uuid) => {
     try {
@@ -150,22 +133,22 @@ const Accessories = () => {
             </thead>
             <tbody>
               {currentData.map((item) => (
-                <tr key={item.uuid} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                <tr key={item.uuid} className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
                   <td className="px-16 py-4">
-                    <img src={item.picture_url} alt="Product" className="w-12 h-12 rounded-full" />
+                    <img src={item.picture_url} alt="Product" className="w-12 h-12 rounded-full object-cover" />
                   </td>
                   <td className="px-6 py-4">{item.name}</td>
                   <td className="px-6 py-4">{item.type}</td>
                   <td className="px-6 py-4">${item.price}</td>
-                  <td className="px-6 py-4 flex space-x-2">
-                    <FaPencilAlt onClick={() => {setSelectedAccessory(item), handleEditAccessory(item)}} className="cursor-pointer text-blue-500" />
-                    <FaTrashAlt onClick={() => handleDeleteAccessory(item.uuid)} className="cursor-pointer text-red-500" />
+                  <td className="px-6 py-4 flex space-x-12">
+                    <FaPencilAlt onClick={() => {setSelectedAccessory(item), handleEditAccessory(item)}} className="cursor-pointer text-blue-500 hover:scale-150 transition-transform duration-200" />
+                    <FaTrashAlt onClick={() => handleDeleteAccessory(item.uuid)} className="cursor-pointer text-red-500 hover:scale-150 transition-transform duration-200" />
                     <FaEye
                       onClick={() => {
-                        setShowDetailModal(true); // First, open the modal
                         setSelectedAccessory(item); // Then, set the selected accessory
+                        setShowDetailModal(true); // First, open the modal
                       }}
-                      className="cursor-pointer text-gray-500"
+                      className="cursor-pointer text-gray-500 hover:scale-150 transition-transform duration-200"
                     />
 
                   </td>
@@ -217,12 +200,10 @@ const Accessories = () => {
       {selectedAccessory && (
         <EditAccModal
           show={showEditModal}
-          onClose={() => {
-            setShowEditModal(false),
+          onClose={async () => {
             setSelectedAccessory(null);
           }}
           accessory={selectedAccessory}
-          onSave={handleSaveAccessory}
         />
       )}
     </Flowbite>

@@ -9,20 +9,24 @@ const api = axios.create({
 });
 
 const refreshAccessToken = async () => {
-    const refreshToken = localStorage.getItem('refresh_token');
-    try {
-      // Kirim permintaan untuk memperbarui token
-      const response = await api.post('/v1/auth/refresh', { refresh_token: refreshToken });
-      const newAccessToken = response.data.access_token;
-      // Simpan token akses yang baru ke localStorage
-      localStorage.setItem('access_token', newAccessToken);
-      return newAccessToken;
-    } catch (error) {
-      console.error('Gagal mendapatkan refresh token:', error);
-      // Jika refresh gagal, Anda dapat mengarahkan pengguna ke halaman login atau menangani kesalahan lain
-      return null;
-    }
-  };
+  const refreshToken = localStorage.getItem('refresh_token');
+  try {
+    // Kirim permintaan untuk memperbarui token
+    const response = await api.post('/v1/auth/refresh', { refresh_token: refreshToken }, {
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+    const newAccessToken = response.data.access_token;
+    // Simpan token akses yang baru ke localStorage
+    localStorage.setItem('access_token', newAccessToken);
+    return newAccessToken;
+  } catch (error) {
+    console.error('Gagal mendapatkan refresh token:', error);
+    // Jika refresh gagal, Anda dapat mengarahkan pengguna ke halaman login atau menangani kesalahan lain
+    return null;
+  }
+};
   
   
   // Interceptor untuk menambahkan token ke setiap permintaan

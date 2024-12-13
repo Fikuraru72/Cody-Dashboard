@@ -17,7 +17,7 @@ export const getAllAccessories = async () => {
 };
 
 export const createAccessory = async (accessory) => {
-  console.log('Creating accessory:', accessory);
+  // console.log('Creating accessory:', accessory);
 
   try {
     // Validasi data accessory
@@ -33,7 +33,7 @@ export const createAccessory = async (accessory) => {
       type: accessory.type,
     };
 
-    console.log('Payload:', JSON.stringify(payload));
+    // console.log('Payload:', JSON.stringify(payload));
 
 
     // Kirim request ke API
@@ -53,12 +53,32 @@ export const createAccessory = async (accessory) => {
 };
 
 
-export const updateAccessory = async (uuid, accessory) => {
+export const updateAccessory = async (accessory) => {
+
   try {
-    if (!uuid || !accessory.name || !accessory.type || !accessory.price) {
+    if (!accessory.uuid || !accessory.name || !accessory.type || !accessory.price) {
       throw new Error('Data untuk pembaruan tidak lengkap.');
     }
-    const response = await api.post(`/v1/admin/costume/update`);
+    // console.log('Updating accessory:', accessory);
+    const payload = {
+      uuid: accessory.uuid,
+      created_at: accessory.created_at,
+      update_at: accessory.update_at || Date.now(),
+      delete_at: accessory.delete_at || null,
+      name: accessory.name,
+      picture_url: accessory.image,
+      price: parseInt(accessory.price, 10), // Convert price to integer
+      type: accessory.type
+    };
+
+    console.log(payload);
+
+    const response = await api.post('/v1/admin/costume/update', payload, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
     return response.data;
   } catch (error) {
     console.error('Error updating accessory:', error);
