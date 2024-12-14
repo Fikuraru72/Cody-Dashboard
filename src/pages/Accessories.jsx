@@ -4,7 +4,7 @@ import { FaPencilAlt, FaTrashAlt, FaEye } from 'react-icons/fa';
 import AddAccessoriesModal from '../lib/components/modals/AddAccessoriesModal';
 import DetailAccModals from '../lib/components/modals/DetailAccModals';
 import EditAccModal from '../lib/components/modals/EditAccModal';
-import { getAllAccessories, updateAccessory, deleteAccessory } from '../lib/api/accessoriesApi';
+import { getAllAccessories, deleteAccessory } from '../lib/api/accessoriesApi';
 
 const Accessories = () => {
   const [accessories, setAccessories] = useState([]);

@@ -1,11 +1,12 @@
-import api from './axiosInstance'
+import api from './axiosInstance';
 
-export const getAllMembers = async () => {
+
+export const membersList = async () => {
     try {
-      const response = await api.get('/v1//admin/analytics/amount-resume');
-        return response.data.data; // Kembalikan data yang sesuai
+        const response = await api.get('/v1/admin/user/');
+        return response.data;
     } catch (error) {
-        console.error('Error fetching accessories:', error);
-      return [];
+        console.error('Error fetching members:', error);
+        return [];
     }
-  };
+}

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Card from '../lib/components/card';
 import LineChart from '../lib/components/LineChart';
 import DonutChart from '../lib/components/DonutChart';
-import { getAllMembers } from '../lib/api/membersApi';
+import { getAnalytics } from '../lib/api/homeApi';
 
 const Home = () => {
   const [userCount, setUserCount] = useState(0);
@@ -19,7 +19,7 @@ const Home = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await getAllMembers();
+      const response = await getAnalytics();
         setUserCount(response.user_count);
         setCostumeCount(response.costume_count);
         setJournalCount(response.journal_created_count);
