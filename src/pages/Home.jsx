@@ -1,75 +1,68 @@
-import React, { useState } from 'react'
-import Card from '../lib/components/card'
-import LineChart from '../lib/components/LineChart'
-import DonutChart from '../lib/components/DonutChart'
+import React, { useState, useEffect } from 'react';
+import Card from '../lib/components/card';
+import LineChart from '../lib/components/LineChart';
+import DonutChart from '../lib/components/DonutChart';
+import { getAllMembers } from '../lib/api/membersApi';
 
 const Home = () => {
-  const [value1, setValue1] = useState(300)
-  const [text1, setText1] = useState('User Application 1')
-  const [value2, setValue2] = useState(400)
-  const [text2, setText2] = useState('User Application 2')
-  const [value3, setValue3] = useState(500)
-  const [text3, setText3] = useState('User Application 3')
+  const [userCount, setUserCount] = useState(0);
+  const [costumeCount, setCostumeCount] = useState(0);
+  const [journalCount, setJournalCount] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const handleValueChange1 = (e) => {
-    setValue1(e.target.value)
-  }
+  useEffect(() => {
+    fetchData();
+  }, []);
 
-  const handleTextChange1 = (e) => {
-    setText1(e.target.value)
-  }
-
-  const handleValueChange2 = (e) => {
-    setValue2(e.target.value)
-  }
-
-  const handleTextChange2 = (e) => {
-    setText2(e.target.value)
-  }
-
-  const handleValueChange3 = (e) => {
-    setValue3(e.target.value)
-  }
-
-  const handleTextChange3 = (e) => {
-    setText3(e.target.value)
-  }
+  const fetchData = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await getAllMembers();
+        setUserCount(response.user_count);
+        setCostumeCount(response.costume_count);
+        setJournalCount(response.journal_created_count);
+    } catch (error) {
+        setError('Failed to fetch data. Please try again later.');
+        console.error(error);
+    } finally {
+        setLoading(false);
+    }
+  };
 
   return (
     <div>
       <div className='mt-10 flex flex-wrap'>
-        <div className=''>
+        <div className='mr-2'>
           <Card 
-            value={value1} 
-            text={text1} 
-            onValueChange={handleValueChange1} 
-            onTextChange={handleTextChange1} 
+            value={loading ? 'Loading...' : userCount} 
+            text='User Count' 
           />
         </div>
-        <div className="">
+        <div className='mr-2'>
           <Card 
-            value={value2} 
-            text={text2} 
-            onValueChange={handleValueChange2} 
-            onTextChange={handleTextChange2} 
+            value={loading ? 'Loading...' : costumeCount} 
+            text='Costume Count' 
           />
         </div>
-        <div className="">
+        <div className='mr-2'>
           <Card 
-            value={value3} 
-            text={text3} 
-            onValueChange={handleValueChange3} 
-            onTextChange={handleTextChange3} 
+            value={loading ? 'Loading...' : journalCount} 
+            text='Journal Count' 
           />
         </div>
       </div>
+
+      {error && <div className='text-red-500 mt-4'>{error}</div>}
+
       <div className='container flex mt-10'>
-          <LineChart />
-          <span className='mx-4'></span>
-          <DonutChart />
+        <LineChart />
+        <span className='mx-4'></span>
+        <DonutChart />
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default Home;

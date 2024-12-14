@@ -27,16 +27,14 @@ export const login = async (credentials) => {
   }
 };
 
+export const logout = async () => {
+  const refreshToken = localStorage.getItem('refresh_token');
+  await api.post('/v1/user/auth/signout', { refresh_token: refreshToken });
 
+  // Hapus token dari localStorage
+  localStorage.removeItem('access_token');
+  localStorage.removeItem('refresh_token');
 
-// export const logout = async () => {
-//   const refreshToken = localStorage.getItem('refresh_token');
-//   await api.post('/v1/auth/logout', { refresh_token: refreshToken });
-
-//   // Hapus token dari localStorage
-//   localStorage.removeItem('access_token');
-//   localStorage.removeItem('refresh_token');
-
-//   // Redirect ke login
-//   window.location.href = '/login';
-// };
+  // Redirect ke login
+  window.location.href = '/login';
+};
