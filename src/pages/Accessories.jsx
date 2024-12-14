@@ -148,7 +148,7 @@ const Accessories = () => {
                         setSelectedAccessory(item); // Then, set the selected accessory
                         setShowDetailModal(true); // First, open the modal
                       }}
-                      className="cursor-pointer text-gray-500 hover:scale-150 transition-transform duration-200"
+                      className="cursor-pointer text-green-500 hover:scale-150 transition-transform duration-200"
                     />
 
                   </td>

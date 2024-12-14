@@ -111,19 +111,19 @@ export const Members = () => {
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
               <th scope="col" className="px-6 py-3">
-                Nama
+                Name
               </th>
               <th scope="col" className="px-6 py-3">
                 Email
               </th>
               <th scope="col" className="px-6 py-3">
-                Jenis Kelamin
+                Gender
               </th>
               <th scope="col" className="px-6 py-3">
-                Dibuat Pada
+                Create at
               </th>
               <th scope="col" className="px-6 py-3">
-                Aksi
+                Action
               </th>
             </tr>
           </thead>
@@ -142,7 +142,7 @@ export const Members = () => {
               </tr>
             ) : currentData.length > 0 ? (
               currentData.map((item) => (
-                <tr key={item.uuid} className="bg-white border-b">
+                <tr key={item.uuid} className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
                   <td className="px-6 py-4">
                     {`${item.first_name} ${item.last_name}`}
                   </td>
@@ -150,7 +150,7 @@ export const Members = () => {
                   <td className="px-6 py-4">{item.gender}</td>
                   <td className="px-6 py-4">{item.created_at}</td>
                   <td className="px-6 py-4 flex space-x-2">
-                    <button
+                    {/* <button
                       onClick={() => handleEditUser(item)}
                       className="text-blue-500"
                     >
@@ -161,10 +161,10 @@ export const Members = () => {
                       className="text-red-500"
                     >
                       <FaTrashAlt />
-                    </button>
+                    </button> */}
                     <button
                       onClick={() => handleViewDetails(item)}
-                      className="text-green-500"
+                      className="cursor-pointer text-green-500 hover:scale-150 transition-transform duration-200"
                     >
                       <FaEye />
                     </button>
@@ -184,21 +184,21 @@ export const Members = () => {
         {/* Navigasi halaman */}
         <div className="flex justify-between items-center py-4">
           <button
-            className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
+            className="px-4 py-2 text-white bg-blue-500 rounded"
             onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
             disabled={currentPage === 1}
           >
-            Sebelumnya
+           Previous
           </button>
           <span>
-            Halaman {currentPage} dari {totalPages}
+            Page {currentPage} of {totalPages}
           </span>
           <button
-            className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
+            className="px-4 py-2 text-white bg-blue-500 rounded"
             onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
             disabled={currentPage === totalPages}
           >
-            Selanjutnya
+            Next
           </button>
         </div>
       </div>
