@@ -1,31 +1,68 @@
-import React from 'react'
-
-import { GoBell } from "react-icons/go"
-
+import React, { useState, useEffect } from 'react';
+import Card from '../card';
+// import LineChart from '../components/LineChart';
+// import DonutChart from '../lib/components/DonutChart';
+import { getAnalytics } from '../../api/homeApi';
 
 export const Header = () => {
+  const [userCount, setUserCount] = useState(0);
+  const [costumeCount, setCostumeCount] = useState(0);
+  const [journalCount, setJournalCount] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await getAnalytics();
+        setUserCount(response.user_count);
+        setCostumeCount(response.costume_count);
+        setJournalCount(response.journal_created_count);
+    } catch (error) {
+        setError('Failed to fetch data. Please try again later.');
+        console.error(error);
+    } finally {
+        setLoading(false);
+    }
+  };
+
   return (
-    <div className='flex justify-between items-center mt-5 mb-0'>
-        <div>
-            <h5 className='text-3xl font-bold'>Welcome Back !</h5>
-            {/* <h4 className='text-xl font-semibold'>Admin</h4> */}
+    <div>
+      <div className='mt-10 flex flex-wrap'>
+        <div className='mr-2'>
+          <Card 
+            value={loading ? 'Loading...' : userCount} 
+            text='User Count' 
+          />
         </div>
-        {/* <div className='flex items-center space-x-5'>
-            <div className='flex items-center space-x-5'>
-                <div className='hidden md:flex'>
-                    <input type="text" placeholder='Search....' className='bg-indigo-100/30 px-4 py-2 rounded-lg focus:outline-0 focus:ring-2 focus:ring-indigo-600'/>
-                </div>
-            </div>
-            <button className='relative text-2xl text-gray-600'>
-                <GoBell size={28}/>
-                <span className='absolute top-0 right-0 -mt-1 -mr-3 flex justify-center items-center bg-indigo-600 text-white font-semibold text-[10px] w-5 h-4 rounded-full border-2 border-white' >
-                    9
-                </span>
-            </button>
-            <img className='w-8 g-8 rounded-full border-4 border-indigo-400' src="" alt="" />
-        </div> */}
+        <div className='mr-2'>
+          <Card 
+            value={loading ? 'Loading...' : costumeCount} 
+            text='Costume Count' 
+          />
+        </div>
+        <div className='mr-2'>
+          <Card 
+            value={loading ? 'Loading...' : journalCount} 
+            text='Journal Count' 
+          />
+        </div>
+      </div>
+
+      {error && <div className='text-red-500 mt-4'>{error}</div>}
+
+      <div className='container flex mt-10'>
+        {/* <LineChart /> */}
+        <span className='mx-4'></span>
+        {/* <DonutChart /> */}
+      </div>
     </div>
-  )
-}
+  );
+};
 
 export default Header;

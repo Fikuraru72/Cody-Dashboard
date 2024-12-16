@@ -57,9 +57,9 @@ const Home = () => {
       {error && <div className='text-red-500 mt-4'>{error}</div>}
 
       <div className='container flex mt-10'>
-        <LineChart />
+        {/* <LineChart /> */}
         <span className='mx-4'></span>
-        <DonutChart />
+        {/* <DonutChart /> */}
       </div>
     </div>
   );

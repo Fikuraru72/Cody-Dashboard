@@ -61,7 +61,7 @@ const refreshAccessToken = async () => {
           return api(originalRequest);
         } else {
           // Jika refresh token gagal, arahkan pengguna ke login atau tangani sesuai kebutuhan
-          window.location.href = '/login'; // Contoh arahkan ke halaman login
+          // window.location.href = '/login'; // Contoh arahkan ke halaman login
         }
       }
   

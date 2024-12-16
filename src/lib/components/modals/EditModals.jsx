@@ -1,25 +1,66 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal, Button, TextInput, Label } from 'flowbite-react';
+import { updateMember } from '../../api/membersApi'; // Pastikan path ini sesuai
 
 export const EditModals = ({ show, onClose, user, onSave }) => {
   const [formData, setFormData] = useState({
-    name: user.name,
-    email: user.email,
-    gender: user.gender,
-    create: user.create,
+    first_name: user.first_name || '',
+    last_name: user.last_name || '',
+    email: user.email || '',
+    gender: user.gender || '',
+    born_date: user.born_date || '',
   });
+
+    useEffect(() => {
+      if (user) {
+        setFormData({
+          first_name: user.first_name || '',
+          last_name: user.last_name || '',
+          email: user.email || '',
+          gender: user.gender || '',
+          born_date: user.born_date || '',
+        });
+      }
+    }, [user]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSave = () => {
-    onSave(formData);
-    onClose();
+  const handleSave = async () => {
+    try {
+      // Konversi data ke dalam format raw
+      const rawData = {
+        uuid: user.uuid,
+        created_at: user.created_at,
+        updated_at: new Date().toISOString(),
+        deleted_at: null,
+        first_name: formData.first_name,
+        last_name: formData.last_name,
+        email: formData.email,
+        facial_picture_url: user.facial_picture_url,
+        profile_picture_url: user.profile_picture_url,
+        born_date: new Date(formData.born_date).toISOString(),
+        gender: formData.gender,
+        points_amount: user.points_amount,
+        is_verified: user.is_verified,
+        role: user.role,
+      };
+
+      // Panggil API
+      await updateMember(rawData);
+
+      // Callback untuk onSave (opsional)
+      onSave(rawData);
+      onClose();
+    } catch (error) {
+      console.error('Error saving data:', error);
+    }
   };
 
   return (
+    console.log(user),
     <Modal
       show={show}
       onClose={onClose}
@@ -35,25 +76,34 @@ export const EditModals = ({ show, onClose, user, onSave }) => {
 
       <Modal.Body>
         <div className="space-y-6 p-4 text-center">
-          {/* Gambar di atas */}
           <div className="flex justify-center">
             <img
               className="w-20 h-20 rounded-full shadow-lg"
-              src={`https://i.pravatar.cc/150?u=${user.email}`}
+              src={user.profile_picture_url}
               alt="User avatar"
             />
           </div>
-
-          {/* Form Input */}
           <div className="space-y-4 text-left">
             <div className="flex items-center space-x-4">
-              <Label htmlFor="name" value="Name" className="w-1/3 text-sm" />
+              <Label htmlFor="first_name" value="First Name" className="w-1/3 text-sm" />
               <TextInput
-                id="name"
-                name="name"
-                value={formData.name}
+                id="first_name"
+                name="first_name"
+                value={formData.first_name}
                 onChange={handleChange}
-                placeholder="Name"
+                placeholder="First Name"
+                required
+                className="flex-1"
+              />
+            </div>
+            <div className="flex items-center space-x-4">
+              <Label htmlFor="last_name" value="Last Name" className="w-1/3 text-sm" />
+              <TextInput
+                id="last_name"
+                name="last_name"
+                value={formData.last_name}
+                onChange={handleChange}
+                placeholder="Last Name"
                 required
                 className="flex-1"
               />
@@ -84,12 +134,12 @@ export const EditModals = ({ show, onClose, user, onSave }) => {
               />
             </div>
             <div className="flex items-center space-x-4">
-              <Label htmlFor="create" value="Created At" className="w-1/3 text-sm" />
+              <Label htmlFor="born_date" value="Born Date" className="w-1/3 text-sm" />
               <TextInput
-                id="create"
-                name="create"
+                id="born_date"
+                name="born_date"
                 type="date"
-                value={formData.create}
+                value={formData.born_date}
                 onChange={handleChange}
                 required
                 className="flex-1"

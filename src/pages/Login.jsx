@@ -11,7 +11,7 @@ const Login = () => {
     e.preventDefault();
     try {
       await login({ email, password });
-      window.location.href = '/dashboard/home'; // Redirect setelah login berhasil
+      window.location.href = '/dashboard/members'; // Redirect setelah login berhasil
     } catch (err) {
       setError('Login failed. Please check your credentials.');
     }

@@ -149,8 +149,8 @@ export const Members = () => {
                   <td className="px-6 py-4">{item.email}</td>
                   <td className="px-6 py-4">{item.gender}</td>
                   <td className="px-6 py-4">{item.created_at}</td>
-                  <td className="px-6 py-4 flex space-x-2">
-                    {/* <button
+                  <td className="px-6 py-4 flex space-x-12">
+                    <button
                       onClick={() => handleEditUser(item)}
                       className="text-blue-500"
                     >
@@ -161,7 +161,7 @@ export const Members = () => {
                       className="text-red-500"
                     >
                       <FaTrashAlt />
-                    </button> */}
+                    </button>
                     <button
                       onClick={() => handleViewDetails(item)}
                       className="cursor-pointer text-green-500 hover:scale-150 transition-transform duration-200"

@@ -92,7 +92,7 @@ export const deleteAccessory = async (uuid) => {
       throw new Error('UUID tidak diberikan.');
     }
     const data = { uuid };
-    console.log('Data yang dikirimkan:', data); 
+    // console.log('Data yang dikirimkan:', data); 
     const response = await api.post('/v1/admin/costume/delete', data, {
       headers: {
         'Content-Type': 'application/json',

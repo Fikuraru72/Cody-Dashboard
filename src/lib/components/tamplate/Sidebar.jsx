@@ -16,7 +16,7 @@ export const Sidebar = () => {
 
   // Sidebar Links
   const SIDEBAR_LINKS = [
-    { id: 1, path: "/dashboard/home", name: "Dashboard", icon: LuBox },
+    // { id: 1, path: "/dashboard/home", name: "Dashboard", icon: LuBox },
     { id: 2, path: "/dashboard/members", name: "Members", icon: TbUsers },
     { id: 3, path: "/dashboard/accessories", name: "Accessories", icon: AiFillProduct },
     // Uncomment below for additional links

@@ -13,10 +13,10 @@ export const login = async (credentials) => {
     localStorage.setItem('access_token', access_token);
     localStorage.setItem('refresh_token', refresh_token);
 
-    console.log('Access Token from response:', access_token);
-    console.log('Refresh Token from response:', refresh_token);
-    console.log('Access Token from localStorage:', localStorage.getItem('access_token'));
-    console.log('Refresh Token from localStorage:', localStorage.getItem('refresh_token'));
+    // console.log('Access Token from response:', access_token);
+    // console.log('Refresh Token from response:', refresh_token);
+    // console.log('Access Token from localStorage:', localStorage.getItem('access_token'));
+    // console.log('Refresh Token from localStorage:', localStorage.getItem('refresh_token'));
 
     // Tambahkan access token ke header default axios
     api.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
