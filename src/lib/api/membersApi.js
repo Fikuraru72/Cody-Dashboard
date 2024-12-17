@@ -5,7 +5,7 @@ import api from './axiosInstance';
 export const membersList = async () => {
     try {
         const response = await api.get('/v1/admin/user/');
-        console.log('Response data:', response.data);
+        // console.log('Response data:', response.data);
         return response.data;
     } catch (error) {
         console.error('Error fetching members:', error);

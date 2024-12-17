@@ -20,11 +20,6 @@ export const createAccessory = async (accessory) => {
   // console.log('Creating accessory:', accessory);
 
   try {
-    // Validasi data accessory
-    // if (!accessory.name || !accessory.type || !accessory.price || !accessory.picture_url) {
-    //   throw new Error('Data accessory tidak lengkap. Pastikan name, type, price, dan picture_url tersedia.');
-    // }
-
     // Payload sesuai format API
     const payload = {
       name: accessory.name,
