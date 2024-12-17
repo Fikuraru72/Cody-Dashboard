@@ -5,6 +5,7 @@ import api from './axiosInstance';
 export const membersList = async () => {
     try {
         const response = await api.get('/v1/admin/user/');
+        console.log('Response data:', response.data);
         return response.data;
     } catch (error) {
         console.error('Error fetching members:', error);
@@ -40,3 +41,23 @@ export const uploadUserImage = async (image) => {
       throw error;
     }
   };
+
+  export const deleteUser = async (uuid) => {
+    try { 
+      if (!uuid) {
+        throw new Error('UUID tidak diberikan.');
+      }
+      const data = { uuid };
+      // console.log('Data yang dikirimkan:', data); 
+      const response = await api.post('/v1/admin/user/delete', data, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error deleting accessory:', error);
+      throw error;
+    }
+  };
+  

@@ -3,7 +3,7 @@ import { Flowbite } from 'flowbite-react';
 import { FaPencilAlt, FaTrashAlt, FaEye } from 'react-icons/fa';
 import DetailModal from '../lib/components/modals/DetailModal';
 import EditModals from '../lib/components/modals/EditModals';
-import { membersList } from '../lib/api/membersApi';
+import { membersList, deleteUser } from '../lib/api/membersApi';
 
 export const Members = () => {
   // State untuk mengelola data dan UI
@@ -86,12 +86,16 @@ export const Members = () => {
     setSelectedUser(null);
   };
 
-  // Handler untuk menghapus pengguna
-  const handleDeleteUser = (userId) => {
-    const updatedMembers = members.filter((member) => member.uuid !== userId);
-    setMembers(updatedMembers);
+ const handleDeleteUser = async (uuid) => {
+    try {
+      await deleteUser(uuid);
+      fetchAccessories();
+    } catch (error) {
+      console.log('data', uuid);
+      setError('Failed to delete accessory. Please try again.');
+      console.error(error);
+    }
   };
-
   return (
     <Flowbite>
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-5 p-4">
