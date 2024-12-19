@@ -1,8 +1,12 @@
 
 import axios from 'axios';
 
+const BASE_URL = process.env.NODE_ENV === 'production'
+  ? import.meta.env.VITE_API_BASE_URL // URL untuk production
+  : '/api'; // Proxy untuk development
+
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: BASE_URL,
   headers: { 'Content-Type': 'application/json' },
 });
 

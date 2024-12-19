@@ -18,7 +18,7 @@ function App() {
 
         {/* Dashboard Layout */}
         <Route path="/dashboard" element={<Layout />}>
-          <Route path="home" element={<Home />} />
+          {/* <Route path="home" element={<Home />} /> */}
           <Route path="members" element={<Members />} />
           <Route path="accessories" element={<Accessories />} />
         </Route>
